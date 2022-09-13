@@ -1,0 +1,167 @@
+---
+title: "**Structure des données en R**"
+author: "*Joël Kazadi*"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Cette section aborde les différentes structures de données disponibles sous le langage R. On énumère principalement les classes suivantes :
+
+-   les vecteurs ;
+
+-   les matrices ;
+
+-   les arrays ;
+
+-   les dataframes.
+
+# Création d'un vecteur
+
+Un vecteur est un objet de dimension égale à 1 (ligne ou colonne). Les éléments d'un vecteur doivent nécessairement être de nature identique, i.e. de même mode.
+
+## Données numériques
+
+L'objet `vector1` est de la classe "vecteur". Il est de taille égale à 3 et est composé des données de mode "numérique".
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+vector1 <- c(1,2,3)
+print(vector1)
+is.vector(vector1)
+length(vector1)
+str(vector1)
+```
+
+## Chaînes de caractères
+
+L'objet `vector2` est de la classe "vecteur". Il est de taille égale à 2 et est composé des données de mode "chaîne de caractères".
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+vector2 <- c("Joe","Kaz")
+print(vector2)
+is.vector(vector2)
+length(vector2)
+str(vector2)
+```
+
+# Création d'une matrice
+
+Une matrice est un objet de dimension égale à 2 (lignes et colonnes). Comme pour les vecteurs, les éléments d'une matrice doivent nécessairement être de même mode.
+
+## Opérations sur les matrices
+
+Créons une matrice carrée de taille égale à 3.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+matrix1 <- matrix(1:9, nrow=3, ncol=3, byrow = TRUE)
+print(matrix1)
+```
+
+Créons une matrice unitaire de taille égale à 3.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+identite <- diag(x = 1, nrow = 3)
+print(identite)
+```
+
+Effectuons le produit matriciel des deux précédentes matrices.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+matrix1%*%identite
+```
+
+Trouvons la transposée de la matrice `matrix1`.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+t(matrix1)
+```
+
+Calcul des sommes et des moyennes à partir d'une matrice par ligne et par colonne.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+matrix2 <- matrix(c(25,7,6,13), nrow=2, ncol=2, byrow = FALSE)
+print(matrix2)
+rowSums(matrix2)
+colSums(matrix2)
+rowMeans(matrix2)
+colMeans(matrix2)
+```
+
+Calcul du déterminant, de l'inverse, de la décomposition de Cholesky ainsi que des valeurs propres et vecteurs propres de la matrice `matrix2`.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+det(matrix2)
+solve(matrix2)
+chol(matrix2)
+eigen(matrix2)
+```
+
+## Manipulation des matrices
+
+Créons une matrice de dimension 3x2 dont les entrées sont du mode "chaîne de caractères".
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+matrix3 <- matrix(c("A","B","C","d","e","f"), nrow=3, ncol=2)
+print(matrix3)
+dim(matrix3)
+```
+
+Renommons les lignes et les colonnes de la matrice `matrix3`.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+rownames(matrix3)=c("L1", "L2", "L3")
+colnames(matrix3)=c("C1", "C2")
+print(matrix3)
+```
+
+Extrayons les éléments des deux dernières lignes sur la première colonne de la matrice `matrix3` suivant des approches :
+
+-   Approche par "index" ;
+
+-   Approche par "étiquette".
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+matrix3[c(2,3),1]             #approche par index
+matrix3[c("L2", "L3"),"C1"]   #approche par etiquette
+```
+
+Modifions toutes les entrées sur la dernière colonne de la matrice `matrix3`.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+matrix3[c(1:3),2]=c("D","E","F")
+print(matrix3)
+```
+
+# Création d'un array
+
+Un array est un objet de dimension égale à $n>2$. Comme pour les vecteurs et les matrices, les éléments d'un array doivent nécessairement être de même mode, i.e. soit numérique, soit chaîne de caractère.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+V <- vector(mode = "integer", length = 24)    #creation d'un vecteur nul de taille 24
+A <- array(data = V, dim = c(3,4,2))          #creation d'un array compose de 2 matrices de dimension 3x4
+print(A)
+```
+
+# Création d'un dataframe
+
+Dans les vecteurs ou les matrices, les éléments doivent être de même nature, i.e. il y a homogéneité des données. Les dataframes permettent d'avoir des données de nature variée, i.e. à la fois de mode numerique et de mode caractère.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+data <- data.frame(Econometrie = c(18,16,17,18),
+                   Statistique = c(14,13,15,19),
+                   Niveau = c("Bon","Moyen",NA,"Excellent"),
+                   row.names = c("Kadima","Kazadi","Nsamba","Malu"))
+print(data)
+```
+
+Réalisons le résumé statistique du dataframe, puis inspectons la présence de valeurs manquantes dans ce dataframe.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
+summary(data)
+summary(is.na(data))
+```
